@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xem chi tiết văn bản</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 30px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 30px 40px;
+        }
+
+        header h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .back-button {
+            display: inline-block;
+            margin-bottom: 15px;
+            padding: 10px 20px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+
+        .back-button:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .document-meta {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            border-left: 5px solid #1e3c72;
+        }
+
+        .document-meta h3 {
+            color: #1e3c72;
+            margin-bottom: 15px;
+        }
+
+        .meta-item {
+            margin-bottom: 10px;
+            color: #666;
+        }
+
+        .meta-item strong {
+            color: #333;
+        }
+
+        .search-info {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            color: #856404;
+        }
+
+        .search-info strong {
+            color: #1e3c72;
+        }
+
+        .document-content {
+            line-height: 1.9;
+            font-size: 1.05em;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            color: #333;
+        }
+
+        .document-content .highlight {
+            background: #ffeb3b;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: 600;
+            border: 2px solid #fdd835;
+            box-shadow: 0 2px 5px rgba(253, 216, 53, 0.3);
+        }
+
+        .document-content .target-position {
+            background: #ff9800;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: 700;
+            border: 2px solid #f57c00;
+            box-shadow: 0 2px 8px rgba(255, 152, 0, 0.4);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                box-shadow: 0 2px 8px rgba(255, 152, 0, 0.4);
+            }
+            50% {
+                box-shadow: 0 2px 15px rgba(255, 152, 0, 0.7);
+            }
+        }
+
+        .scroll-indicator {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #1e3c72;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 50px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+            font-weight: 600;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        footer {
+            background: #f8f9fa;
+            padding: 20px;
+            text-align: center;
+            color: #666;
+            border-top: 1px solid #dee2e6;
+        }
+
+        @media (max-width: 768px) {
+            .content {
+                padding: 20px;
+            }
+
+            header h1 {
+                font-size: 1.5em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <a href="index.html" class="back-button">← Quay lại tìm kiếm</a>
+            <h1 id="docTitle">Đang tải văn bản...</h1>
+        </header>
+
+        <div class="content">
+            <div class="document-meta" id="docMeta"></div>
+            <div class="search-info" id="searchInfo"></div>
+            <div class="document-content" id="docContent"></div>
+        </div>
+
+        <footer>
+            <p>Hệ thống tra cứu văn bản pháp luật © 2024</p>
+        </footer>
+    </div>
+
+    <div class="scroll-indicator" id="scrollIndicator" style="display: none;">
+        ↓ Vị trí từ khóa bên dưới
+    </div>
+
+    <script>
+        window.addEventListener('load', () => {
+            loadDocument();
+        });
+
+        function loadDocument() {
+            const data = sessionStorage.getItem('currentDocument');
+            
+            if (!data) {
+                document.getElementById('docTitle').textContent = 'Không tìm thấy văn bản';
+                document.getElementById('docContent').innerHTML = `
+                    <div style="text-align: center; padding: 60px; color: #999;">
+                        <h3>❌ Lỗi</h3>
+                        <p>Không tìm thấy thông tin văn bản. Vui lòng quay lại trang tìm kiếm.</p>
+                        <a href="index.html" style="display: inline-block; margin-top: 20px; padding: 10px 25px; background: #1e3c72; color: white; text-decoration: none; border-radius: 8px;">← Quay lại</a>
+                    </div>
+                `;
+                return;
+            }
+
+            const { doc, query, position } = JSON.parse(data);
+
+            // Update title
+            document.getElementById('docTitle').textContent = doc.name;
+
+            // Update metadata
+            document.getElementById('docMeta').innerHTML = `
+                <h3>📋 Thông tin văn bản</h3>
+                <div class="meta-item"><strong>Tên file:</strong> ${doc.fileName}</div>
+                <div class="meta-item"><strong>Số điều khoản:</strong> ${doc.articles.length}</div>
+                <div class="meta-item"><strong>GitHub:</strong> <a href="${doc.url}" target="_blank" style="color: #1e3c72;">Xem trên GitHub</a></div>
+            `;
+
+            // Update search info
+            document.getElementById('searchInfo').innerHTML = `
+                🔍 <strong>Từ khóa tìm kiếm:</strong> "${query}" | 
+                📍 <strong>Đang hiển thị vị trí khớp</strong> (được đánh dấu màu cam)
+            `;
+
+            // Highlight content
+            const highlightedContent = highlightContent(doc.content, query, position);
+            document.getElementById('docContent').innerHTML = highlightedContent;
+
+            // Scroll to target position after a short delay
+            setTimeout(() => {
+                scrollToTarget();
+            }, 500);
+        }
+
+        function highlightContent(content, query, targetPosition) {
+            // First, escape HTML
+            let result = content.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+            // Highlight all occurrences of the query
+            const regex = new RegExp(`(${escapeRegex(query)})`, 'gi');
+            let matches = [];
+            let match;
+            
+            const tempRegex = new RegExp(regex);
+            while ((match = tempRegex.exec(content)) !== null) {
+                matches.push({
+                    start: match.index,
+                    end: match.index + match[0].length,
+                    text: match[0],
+                    isTarget: Math.abs(match.index - targetPosition) < 50
+                });
+            }
+
+            // Sort matches by position (descending) to replace from end to start
+            matches.sort((a, b) => b.start - a.start);
+
+            // Apply highlights
+            matches.forEach(m => {
+                const before = result.substring(0, m.start);
+                const after = result.substring(m.end);
+                const highlighted = m.isTarget 
+                    ? `<span class="highlight target-position" id="targetMatch">${m.text}</span>`
+                    : `<span class="highlight">${m.text}</span>`;
+                result = before + highlighted + after;
+            });
+
+            return result;
+        }
+
+        function scrollToTarget() {
+            const target = document.getElementById('targetMatch');
+            if (target) {
+                // Show scroll indicator first
+                const indicator = document.getElementById('scrollIndicator');
+                indicator.style.display = 'block';
+
+                // Smooth scroll to target
+                setTimeout(() => {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    
+                    // Hide indicator after scrolling
+                    setTimeout(() => {
+                        indicator.style.display = 'none';
+                    }, 3000);
+                }, 100);
+            }
+        }
+
+        function escapeRegex(string) {
+            return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        }
+    </script>
+</body>
+</html>
