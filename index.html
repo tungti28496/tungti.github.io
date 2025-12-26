@@ -655,12 +655,12 @@
                     const preview = highlightText(article.content.substring(0, 300), query);
                     
                     html += `
-                        <div class="article-item" onclick="viewDocument('${encodeURIComponent(doc.fileName)}', '${query}', ${article.position})">
+                        <div class="article-item">
                             <div class="article-header">
-                                <span class="article-number">
+                                <span class="article-number" onclick="viewArticle('${encodeURIComponent(doc.fileName)}', ${article.position}, '${article.label}', '${article.number}')" style="cursor: pointer; user-select: none;" title="Click để xem ${article.label} ${article.number}">
                                     📌 ${article.label} ${article.number}
                                 </span>
-                                <button class="view-detail-btn" onclick="event.stopPropagation(); viewDocument('${encodeURIComponent(doc.fileName)}', '${query}', ${article.position})">
+                                <button class="view-detail-btn" onclick="viewDocument('${encodeURIComponent(doc.fileName)}', '${query}', ${article.position})">
                                     👁️ Xem chi tiết
                                 </button>
                             </div>
