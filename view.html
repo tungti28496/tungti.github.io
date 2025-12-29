@@ -142,6 +142,34 @@
             box-shadow: 0 5px 20px rgba(0,0,0,0.3);
             font-weight: 600;
             animation: bounce 2s infinite;
+            z-index: 1000;
+        }
+
+        .scroll-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 24px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+            transition: all 0.3s;
+            z-index: 999;
+            display: none;
+        }
+
+        .scroll-to-top:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+        }
+
+        .scroll-to-top.show {
+            display: block;
         }
 
         @keyframes bounce {
@@ -194,6 +222,10 @@
         ↓ Vị trí từ khóa bên dưới
     </div>
 
+    <button class="scroll-to-top" id="scrollToTop" onclick="scrollToTopFunc()" title="Lên đầu trang">
+        ↑
+    </button>
+
     <script>
         window.addEventListener('load', () => {
             loadDocument();
@@ -231,7 +263,7 @@
 
             // Create article navigation
             if (doc.articles && doc.articles.length > 0) {
-                let navHTML = '<div class="article-navigation"><h4>📑 Danh mục điều khoản (Click để di chuyển)</h4>';
+                let navHTML = '<div class="article-navigation"><h4>📑 Danh mục điều khoản - Click để di chuyển (Tổng: ' + doc.articles.length + ')</h4>';
                 
                 const uniqueArticles = [];
                 doc.articles.forEach(article => {
@@ -241,17 +273,14 @@
                     }
                 });
 
-                uniqueArticles.slice(0, 20).forEach(article => {
+                // Hiển thị TẤT CẢ các điều khoản, không giới hạn
+                uniqueArticles.forEach(article => {
                     navHTML += `
-                        <a href="#article-${article.position}" class="article-link" onclick="scrollToArticle(${article.position})">
+                        <a href="#article-${article.position}" class="article-link" onclick="scrollToArticle(${article.position}); return false;">
                             ${article.label} ${article.number}
                         </a>
                     `;
                 });
-
-                if (doc.articles.length > 20) {
-                    navHTML += `<p style="color: #666; margin-top: 10px; font-size: 0.9em;">... và ${doc.articles.length - 20} điều khoản khác</p>`;
-                }
 
                 navHTML += '</div>';
                 document.getElementById('docMeta').insertAdjacentHTML('afterend', navHTML);
@@ -292,13 +321,13 @@
 
             // Wrap each article with anchor and highlighting
             sortedArticles.forEach(article => {
-                const isTarget = Math.abs(article.position - targetPosition) < 10;
+                const isTarget = Math.abs(article.position - targetPosition) < 20;
                 const before = result.substring(0, article.position);
                 const articleText = article.fullMatch;
                 const after = result.substring(article.position + articleText.length);
                 
                 const wrapped = isTarget
-                    ? `<span id="article-${article.position}" class="highlight target-position" id="targetMatch">${articleText}</span>`
+                    ? `<span id="article-${article.position}" class="highlight target-position" data-target="true">${articleText}</span>`
                     : `<span id="article-${article.position}" class="highlight">${articleText}</span>`;
                 
                 result = before + wrapped + after;
@@ -367,6 +396,34 @@
             if (element) {
                 // Smooth scroll with offset for better visibility
                 const elementPosition = element.getBoundingClientRect().top;
+                const offsetPosition = elementPosition + window.pageYOffset - 150;
+
+                window.scrollTo({
+                    top: offsetPosition,
+                    behavior: 'smooth'
+                });
+                
+                // Highlight animation
+                element.style.transition = 'all 0.5s';
+                element.style.transform = 'scale(1.05)';
+                element.style.boxShadow = '0 5px 20px rgba(255, 152, 0, 0.6)';
+                
+                setTimeout(() => {
+                    element.style.transform = 'scale(1)';
+                    element.style.boxShadow = '';
+                }, 1000);
+            } else {
+                console.log('Article element not found:', position);
+            }
+        }
+
+        function escapeRegex(string) {
+            return string.replace(/[.*+?^${}()|[\]\\]/g, '\\        // Scroll to specific article
+        function scrollToArticle(position) {
+            const element = document.getElementById(`article-${position}`);
+            if (element) {
+                // Smooth scroll with offset for better visibility
+                const elementPosition = element.getBoundingClientRect().top;
                 const offsetPosition = elementPosition + window.pageYOffset - 100;
 
                 window.scrollTo({
@@ -389,6 +446,35 @@
         function escapeRegex(string) {
             return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
         }
+    </script>');
+        }
+
+        // Scroll to top function
+        function scrollToTopFunc() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+
+        // Show/hide scroll to top button
+        window.addEventListener('scroll', function() {
+            const scrollToTopBtn = document.getElementById('scrollToTop');
+            const scrollIndicator = document.getElementById('scrollIndicator');
+            
+            if (window.pageYOffset > 300) {
+                scrollToTopBtn.classList.add('show');
+            } else {
+                scrollToTopBtn.classList.remove('show');
+            }
+
+            // Hide scroll indicator when scrolling
+            if (scrollIndicator.style.display === 'block' && window.pageYOffset > 0) {
+                setTimeout(() => {
+                    scrollIndicator.style.display = 'none';
+                }, 1000);
+            }
+        });
     </script>
 </body>
 </html>
