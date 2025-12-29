@@ -145,6 +145,15 @@
             z-index: 1000;
         }
 
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
         .scroll-to-top {
             position: fixed;
             bottom: 30px;
@@ -172,13 +181,59 @@
             display: block;
         }
 
-        @keyframes bounce {
-            0%, 100% {
-                transform: translateY(0);
-            }
-            50% {
-                transform: translateY(-10px);
-            }
+        .article-link {
+            background: #e3f2fd;
+            border: 2px solid #1e3c72;
+            padding: 8px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-block;
+            margin: 4px;
+            text-decoration: none;
+            color: #1e3c72;
+            font-weight: 600;
+        }
+
+        .article-link:hover {
+            background: #1e3c72;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(30, 60, 114, 0.3);
+        }
+
+        .article-navigation {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            border-left: 5px solid #28a745;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .article-navigation h4 {
+            color: #28a745;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+
+        .article-navigation::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .article-navigation::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        .article-navigation::-webkit-scrollbar-thumb {
+            background: #28a745;
+            border-radius: 10px;
+        }
+
+        .article-navigation::-webkit-scrollbar-thumb:hover {
+            background: #218838;
         }
 
         footer {
@@ -227,7 +282,7 @@
     </button>
 
     <script>
-        window.addEventListener('load', () => {
+        window.addEventListener('load', function() {
             loadDocument();
         });
 
@@ -236,13 +291,12 @@
             
             if (!data) {
                 document.getElementById('docTitle').textContent = 'Không tìm thấy văn bản';
-                document.getElementById('docContent').innerHTML = `
-                    <div style="text-align: center; padding: 60px; color: #999;">
-                        <h3>❌ Lỗi</h3>
-                        <p>Không tìm thấy thông tin văn bản. Vui lòng quay lại trang tìm kiếm.</p>
-                        <a href="index.html" style="display: inline-block; margin-top: 20px; padding: 10px 25px; background: #1e3c72; color: white; text-decoration: none; border-radius: 8px;">← Quay lại</a>
-                    </div>
-                `;
+                document.getElementById('docContent').innerHTML = 
+                    '<div style="text-align: center; padding: 60px; color: #999;">' +
+                    '<h3>❌ Lỗi</h3>' +
+                    '<p>Không tìm thấy thông tin văn bản. Vui lòng quay lại trang tìm kiếm.</p>' +
+                    '<a href="index.html" style="display: inline-block; margin-top: 20px; padding: 10px 25px; background: #1e3c72; color: white; text-decoration: none; border-radius: 8px;">← Quay lại</a>' +
+                    '</div>';
                 return;
             }
 
@@ -254,32 +308,32 @@
             document.getElementById('docTitle').textContent = doc.name;
 
             // Update metadata
-            document.getElementById('docMeta').innerHTML = `
-                <h3>📋 Thông tin văn bản</h3>
-                <div class="meta-item"><strong>Tên file:</strong> ${doc.fileName}</div>
-                <div class="meta-item"><strong>Số điều khoản:</strong> ${doc.articles.length}</div>
-                <div class="meta-item"><strong>GitHub:</strong> <a href="${doc.url}" target="_blank" style="color: #1e3c72;">Xem trên GitHub</a></div>
-            `;
+            let metaHTML = '<h3>📋 Thông tin văn bản</h3>';
+            metaHTML += '<div class="meta-item"><strong>Tên file:</strong> ' + doc.fileName + '</div>';
+            metaHTML += '<div class="meta-item"><strong>Số điều khoản:</strong> ' + doc.articles.length + '</div>';
+            metaHTML += '<div class="meta-item"><strong>GitHub:</strong> <a href="' + doc.url + '" target="_blank" style="color: #1e3c72;">Xem trên GitHub</a></div>';
+            document.getElementById('docMeta').innerHTML = metaHTML;
 
             // Create article navigation
             if (doc.articles && doc.articles.length > 0) {
-                let navHTML = '<div class="article-navigation"><h4>📑 Danh mục điều khoản - Click để di chuyển (Tổng: ' + doc.articles.length + ')</h4>';
+                let navHTML = '<div class="article-navigation">';
+                navHTML += '<h4>📑 Danh mục điều khoản - Click để di chuyển (Tổng: ' + doc.articles.length + ')</h4>';
                 
                 const uniqueArticles = [];
-                doc.articles.forEach(article => {
-                    const key = `${article.label}-${article.number}`;
-                    if (!uniqueArticles.find(a => `${a.label}-${a.number}` === key)) {
+                doc.articles.forEach(function(article) {
+                    const key = article.label + '-' + article.number;
+                    const exists = uniqueArticles.find(function(a) {
+                        return (a.label + '-' + a.number) === key;
+                    });
+                    if (!exists) {
                         uniqueArticles.push(article);
                     }
                 });
 
-                // Hiển thị TẤT CẢ các điều khoản, không giới hạn
-                uniqueArticles.forEach(article => {
-                    navHTML += `
-                        <a href="#article-${article.position}" class="article-link" onclick="scrollToArticle(${article.position}); return false;">
-                            ${article.label} ${article.number}
-                        </a>
-                    `;
+                uniqueArticles.forEach(function(article) {
+                    navHTML += '<a href="#article-' + article.position + '" class="article-link" onclick="scrollToArticle(' + article.position + '); return false;">';
+                    navHTML += article.label + ' ' + article.number;
+                    navHTML += '</a>';
                 });
 
                 navHTML += '</div>';
@@ -287,48 +341,47 @@
             }
 
             // Update search info based on mode
+            let infoHTML = '';
             if (mode === 'article') {
-                document.getElementById('searchInfo').innerHTML = `
-                    📍 <strong>Đang xem trực tiếp:</strong> ${params.articleLabel} ${params.articleNumber} | 
-                    🎯 <strong>Vị trí được đánh dấu màu cam và tự động scroll</strong>
-                `;
-                // Display content with article highlight
+                infoHTML = '📍 <strong>Đang xem trực tiếp:</strong> ' + params.articleLabel + ' ' + params.articleNumber + ' | ';
+                infoHTML += '🎯 <strong>Vị trí được đánh dấu màu cam và tự động scroll</strong>';
+                document.getElementById('searchInfo').innerHTML = infoHTML;
+                
                 const highlightedContent = highlightArticle(doc.content, params.position, doc.articles);
                 document.getElementById('docContent').innerHTML = highlightedContent;
             } else {
-                // Search mode
-                document.getElementById('searchInfo').innerHTML = `
-                    🔍 <strong>Từ khóa tìm kiếm:</strong> "${params.query}" | 
-                    📍 <strong>Vị trí khớp được đánh dấu màu cam và tự động scroll</strong>
-                `;
-                // Display content with search highlight
+                infoHTML = '🔍 <strong>Từ khóa tìm kiếm:</strong> "' + params.query + '" | ';
+                infoHTML += '📍 <strong>Vị trí khớp được đánh dấu màu cam và tự động scroll</strong>';
+                document.getElementById('searchInfo').innerHTML = infoHTML;
+                
                 const highlightedContent = highlightContent(doc.content, params.query, params.position, doc.articles);
                 document.getElementById('docContent').innerHTML = highlightedContent;
             }
 
-            // Scroll to target position after a short delay
-            setTimeout(() => {
+            setTimeout(function() {
                 scrollToTarget();
             }, 800);
         }
 
-        // Highlight article in content
         function highlightArticle(content, targetPosition, articles) {
             let result = content;
             
-            // Sort articles by position (descending)
-            const sortedArticles = [...articles].sort((a, b) => b.position - a.position);
+            const sortedArticles = articles.slice().sort(function(a, b) {
+                return b.position - a.position;
+            });
 
-            // Wrap each article with anchor and highlighting
-            sortedArticles.forEach(article => {
+            sortedArticles.forEach(function(article) {
                 const isTarget = Math.abs(article.position - targetPosition) < 20;
                 const before = result.substring(0, article.position);
                 const articleText = article.fullMatch;
                 const after = result.substring(article.position + articleText.length);
                 
-                const wrapped = isTarget
-                    ? `<span id="article-${article.position}" class="highlight target-position" data-target="true">${articleText}</span>`
-                    : `<span id="article-${article.position}" class="highlight">${articleText}</span>`;
+                let wrapped = '';
+                if (isTarget) {
+                    wrapped = '<span id="article-' + article.position + '" class="highlight target-position" data-target="true">' + articleText + '</span>';
+                } else {
+                    wrapped = '<span id="article-' + article.position + '" class="highlight">' + articleText + '</span>';
+                }
                 
                 result = before + wrapped + after;
             });
@@ -337,16 +390,14 @@
         }
 
         function highlightContent(content, query, targetPosition, articles) {
-            // First highlight all articles
-            let result = highlightArticle(content, -1, articles);
+            let result = highlightArticle(content, targetPosition, articles);
 
-            // Then highlight search query
-            const regex = new RegExp(`(${escapeRegex(query)})`, 'gi');
-            let matches = [];
+            const regex = new RegExp('(' + escapeRegex(query) + ')', 'gi');
+            const matches = [];
             let match;
             
             const tempRegex = new RegExp(regex);
-            const plainContent = content; // Use original content for position matching
+            const plainContent = content;
             
             while ((match = tempRegex.exec(plainContent)) !== null) {
                 matches.push({
@@ -357,13 +408,12 @@
                 });
             }
 
-            // Highlight the target match differently
-            matches.forEach(m => {
+            matches.forEach(function(m) {
                 if (m.isTarget) {
-                    const searchRegex = new RegExp(`(<span[^>]*>)?${escapeRegex(m.text)}(</span>)?`, 'gi');
-                    result = result.replace(searchRegex, (matched) => {
+                    const searchRegex = new RegExp('(<span[^>]*>)?' + escapeRegex(m.text) + '(</span>)?', 'gi');
+                    result = result.replace(searchRegex, function(matched) {
                         if (matched.includes('<span')) return matched;
-                        return `<span class="highlight target-position" id="targetMatch">${m.text}</span>`;
+                        return '<span class="highlight target-position" data-target="true">' + m.text + '</span>';
                     });
                 }
             });
@@ -372,29 +422,33 @@
         }
 
         function scrollToTarget() {
-            const target = document.getElementById('targetMatch');
+            let target = document.querySelector('[data-target="true"]');
+            
             if (target) {
-                // Show scroll indicator first
                 const indicator = document.getElementById('scrollIndicator');
                 indicator.style.display = 'block';
 
-                // Smooth scroll to target
-                setTimeout(() => {
-                    target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                setTimeout(function() {
+                    const elementPosition = target.getBoundingClientRect().top;
+                    const offsetPosition = elementPosition + window.pageYOffset - 150;
+
+                    window.scrollTo({
+                        top: offsetPosition,
+                        behavior: 'smooth'
+                    });
                     
-                    // Hide indicator after scrolling
-                    setTimeout(() => {
+                    setTimeout(function() {
                         indicator.style.display = 'none';
                     }, 3000);
-                }, 100);
+                }, 200);
+            } else {
+                console.log('Target element not found for scrolling');
             }
         }
 
-        // Scroll to specific article
         function scrollToArticle(position) {
-            const element = document.getElementById(`article-${position}`);
+            const element = document.getElementById('article-' + position);
             if (element) {
-                // Smooth scroll with offset for better visibility
                 const elementPosition = element.getBoundingClientRect().top;
                 const offsetPosition = elementPosition + window.pageYOffset - 150;
 
@@ -403,12 +457,11 @@
                     behavior: 'smooth'
                 });
                 
-                // Highlight animation
                 element.style.transition = 'all 0.5s';
                 element.style.transform = 'scale(1.05)';
                 element.style.boxShadow = '0 5px 20px rgba(255, 152, 0, 0.6)';
                 
-                setTimeout(() => {
+                setTimeout(function() {
                     element.style.transform = 'scale(1)';
                     element.style.boxShadow = '';
                 }, 1000);
@@ -418,38 +471,9 @@
         }
 
         function escapeRegex(string) {
-            return string.replace(/[.*+?^${}()|[\]\\]/g, '\\        // Scroll to specific article
-        function scrollToArticle(position) {
-            const element = document.getElementById(`article-${position}`);
-            if (element) {
-                // Smooth scroll with offset for better visibility
-                const elementPosition = element.getBoundingClientRect().top;
-                const offsetPosition = elementPosition + window.pageYOffset - 100;
-
-                window.scrollTo({
-                    top: offsetPosition,
-                    behavior: 'smooth'
-                });
-                
-                // Highlight animation
-                element.style.transition = 'all 0.5s';
-                element.style.transform = 'scale(1.05)';
-                element.style.boxShadow = '0 5px 20px rgba(255, 152, 0, 0.6)';
-                
-                setTimeout(() => {
-                    element.style.transform = 'scale(1)';
-                    element.style.boxShadow = '';
-                }, 1000);
-            }
-        }
-
-        function escapeRegex(string) {
             return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
         }
-    </script>');
-        }
 
-        // Scroll to top function
         function scrollToTopFunc() {
             window.scrollTo({
                 top: 0,
@@ -457,7 +481,6 @@
             });
         }
 
-        // Show/hide scroll to top button
         window.addEventListener('scroll', function() {
             const scrollToTopBtn = document.getElementById('scrollToTop');
             const scrollIndicator = document.getElementById('scrollIndicator');
@@ -468,9 +491,8 @@
                 scrollToTopBtn.classList.remove('show');
             }
 
-            // Hide scroll indicator when scrolling
             if (scrollIndicator.style.display === 'block' && window.pageYOffset > 0) {
-                setTimeout(() => {
+                setTimeout(function() {
                     scrollIndicator.style.display = 'none';
                 }, 1000);
             }
