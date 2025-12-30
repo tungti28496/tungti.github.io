@@ -344,7 +344,7 @@
                     </button>
                 </div>
                 <p style="color: #666; font-size: 0.95em;">
-                    💡 Hệ thống sẽ quét toàn bộ file .txt từ GitHub và trả về các điều khoản liên quan
+                    💡 Hệ thống sẽ tìm kiếm trong <strong>tên file</strong> và <strong>nội dung các điều khoản</strong>
                 </p>
             </div>
 
@@ -516,13 +516,25 @@
             var lowerQuery = query.toLowerCase();
 
             documents.forEach(function(doc) {
-                var matches = doc.articles.filter(function(article) {
+                var matches = [];
+                
+                // Tìm trong tên file
+                var fileNameMatch = doc.fileName.toLowerCase().indexOf(lowerQuery) !== -1;
+                var docNameMatch = doc.name.toLowerCase().indexOf(lowerQuery) !== -1;
+                
+                // Tìm trong các điều khoản
+                var articleMatches = doc.articles.filter(function(article) {
                     return article.content.toLowerCase().indexOf(lowerQuery) !== -1 ||
                            article.title.toLowerCase().indexOf(lowerQuery) !== -1;
                 });
 
-                if (matches.length > 0) {
-                    results.push({ document: doc, matches: matches });
+                // Nếu tìm thấy trong tên file hoặc điều khoản
+                if (fileNameMatch || docNameMatch || articleMatches.length > 0) {
+                    results.push({ 
+                        document: doc, 
+                        matches: articleMatches,
+                        matchedFileName: fileNameMatch || docNameMatch
+                    });
                 }
             });
 
@@ -547,41 +559,59 @@
             results.forEach(function(result) {
                 var doc = result.document;
                 var matches = result.matches;
+                var matchedFileName = result.matchedFileName;
 
                 html += '<div class="result-item">';
                 html += '<div class="result-header">';
-                html += '<div><h3>' + doc.name + '</h3></div>';
+                html += '<div><h3>' + doc.name + '</h3>';
+                
+                // Hiển thị badge nếu tìm thấy trong tên file
+                if (matchedFileName) {
+                    html += '<span style="background: #28a745; color: white; padding: 4px 10px; border-radius: 15px; font-size: 0.85em; margin-left: 10px;">✓ Khớp tên file</span>';
+                }
+                
+                html += '</div>';
                 html += '<span class="file-badge">📁 .txt</span>';
                 html += '</div>';
-                html += '<div class="result-meta">📄 File: ' + doc.fileName + ' | 🎯 ' + matches.length + ' điều khoản</div>';
-                html += '<div class="articles-found"><h4>📍 Các điều khoản tìm thấy:</h4>';
-
-                matches.slice(0, 10).forEach(function(article) {
-                    var preview = highlightText(article.content.substring(0, 300), query);
-                    
-                    html += '<div class="article-item">';
-                    html += '<div class="article-header">';
-                    html += '<span class="article-number" onclick="viewArticle(\'' + 
-                            encodeURIComponent(doc.fileName) + '\', ' + article.position + 
-                            ', \'' + article.label + '\', \'' + article.number + '\')" ' +
-                            'title="Click để xem ' + article.label + ' ' + article.number + '">';
-                    html += '📌 ' + article.label + ' ' + article.number + '</span>';
+                html += '<div class="result-meta">📄 File: ' + highlightText(doc.fileName, query) + ' | 🎯 ' + matches.length + ' điều khoản</div>';
+                
+                // Nếu chỉ khớp tên file mà không có điều khoản nào
+                if (matches.length === 0 && matchedFileName) {
+                    html += '<div class="articles-found">';
+                    html += '<p style="color: #666; padding: 15px;">📋 Văn bản này khớp với từ khóa "<strong>' + query + '</strong>" trong tên file. Click "Xem toàn bộ" để xem nội dung.</p>';
                     html += '<button class="view-detail-btn" onclick="viewDocument(\'' + 
-                            encodeURIComponent(doc.fileName) + '\', \'' + query + '\', ' + 
-                            article.position + ')">👁️ Xem toàn bộ</button>';
+                            encodeURIComponent(doc.fileName) + '\', \'' + query + '\', 0)" style="margin-top: 10px;">👁️ Xem toàn bộ văn bản</button>';
                     html += '</div>';
-                    html += '<div class="article-preview" onclick="viewArticle(\'' + 
-                            encodeURIComponent(doc.fileName) + '\', ' + article.position + 
-                            ', \'' + article.label + '\', \'' + article.number + '\')">';
-                    html += preview + (article.content.length > 300 ? '...' : '');
-                    html += '</div>';
-                    html += '<span class="click-hint">💡 Click để xem trực tiếp tại vị trí này</span>';
-                    html += '</div>';
-                });
+                } else {
+                    html += '<div class="articles-found"><h4>📍 Các điều khoản tìm thấy:</h4>';
 
-                if (matches.length > 10) {
-                    html += '<p style="color: #666; font-style: italic; margin-top: 10px;">';
-                    html += '... và ' + (matches.length - 10) + ' điều khoản khác</p>';
+                    matches.slice(0, 10).forEach(function(article) {
+                        var preview = highlightText(article.content.substring(0, 300), query);
+                        
+                        html += '<div class="article-item">';
+                        html += '<div class="article-header">';
+                        html += '<span class="article-number" onclick="viewArticle(\'' + 
+                                encodeURIComponent(doc.fileName) + '\', ' + article.position + 
+                                ', \'' + article.label + '\', \'' + article.number + '\')" ' +
+                                'title="Click để xem ' + article.label + ' ' + article.number + '">';
+                        html += '📌 ' + article.label + ' ' + article.number + '</span>';
+                        html += '<button class="view-detail-btn" onclick="viewDocument(\'' + 
+                                encodeURIComponent(doc.fileName) + '\', \'' + query + '\', ' + 
+                                article.position + ')">👁️ Xem toàn bộ</button>';
+                        html += '</div>';
+                        html += '<div class="article-preview" onclick="viewArticle(\'' + 
+                                encodeURIComponent(doc.fileName) + '\', ' + article.position + 
+                                ', \'' + article.label + '\', \'' + article.number + '\')">';
+                        html += preview + (article.content.length > 300 ? '...' : '');
+                        html += '</div>';
+                        html += '<span class="click-hint">💡 Click để xem trực tiếp tại vị trí này</span>';
+                        html += '</div>';
+                    });
+
+                    if (matches.length > 10) {
+                        html += '<p style="color: #666; font-style: italic; margin-top: 10px;">';
+                        html += '... và ' + (matches.length - 10) + ' điều khoản khác</p>';
+                    }
                 }
 
                 html += '</div></div>';
