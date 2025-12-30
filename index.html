@@ -15,7 +15,123 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
             min-height: 100vh;
+            padding: 0;
+            margin: 0;
+        }
+
+        .layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar-docs {
+            width: 320px;
+            background: white;
+            border-right: 2px solid #dee2e6;
+            position: fixed;
+            left: -320px;
+            top: 0;
+            bottom: 0;
+            overflow-y: auto;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.2);
+            z-index: 1000;
+            transition: left 0.3s ease;
+        }
+
+        .sidebar-docs.show {
+            left: 0;
+        }
+
+        .sidebar-header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
             padding: 20px;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .sidebar-header h3 {
+            font-size: 1.2em;
+            margin-bottom: 10px;
+        }
+
+        .sidebar-count {
+            background: rgba(255,255,255,0.2);
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.9em;
+            display: inline-block;
+        }
+
+        .doc-list {
+            padding: 15px;
+        }
+
+        .doc-list-item {
+            padding: 15px;
+            margin-bottom: 10px;
+            background: #f8f9fa;
+            border-left: 4px solid #1e3c72;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .doc-list-item:hover {
+            background: #e3f2fd;
+            border-left-color: #28a745;
+            transform: translateX(5px);
+        }
+
+        .doc-list-item-title {
+            font-weight: bold;
+            font-size: 1em;
+            color: #1e3c72;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .doc-list-item-meta {
+            font-size: 0.85em;
+            color: #666;
+            display: block;
+        }
+
+        .toggle-sidebar-btn {
+            position: fixed;
+            left: 20px;
+            top: 20px;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            z-index: 1001;
+            transition: all 0.3s;
+        }
+
+        .toggle-sidebar-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+        }
+
+        .toggle-sidebar-btn.active {
+            left: 340px;
+        }
+
+        .main-wrapper {
+            flex: 1;
+            padding: 20px;
+            transition: margin-left 0.3s ease;
+        }
+
+        .main-wrapper.shifted {
+            margin-left: 320px;
         }
 
         .container {
