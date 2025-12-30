@@ -15,119 +15,7 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
             min-height: 100vh;
-        }
-
-        /* Toggle Button */
-        .toggle-sidebar-btn {
-            position: fixed;
-            left: 20px;
-            top: 20px;
-            width: 55px;
-            height: 55px;
-            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
-            color: white;
-            border: none;
-            border-radius: 50%;
-            cursor: pointer;
-            font-size: 24px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
-            z-index: 1001;
-            transition: all 0.3s;
-        }
-
-        .toggle-sidebar-btn:hover {
-            transform: scale(1.1);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.4);
-        }
-
-        .toggle-sidebar-btn.active {
-            left: 340px;
-            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
-        }
-
-        /* Sidebar */
-        .sidebar-docs {
-            width: 320px;
-            background: white;
-            position: fixed;
-            left: -320px;
-            top: 0;
-            bottom: 0;
-            overflow-y: auto;
-            box-shadow: 2px 0 15px rgba(0,0,0,0.3);
-            z-index: 1000;
-            transition: left 0.3s ease;
-        }
-
-        .sidebar-docs.show {
-            left: 0;
-        }
-
-        .sidebar-header {
-            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
-            color: white;
-            padding: 25px 20px;
-            position: sticky;
-            top: 0;
-            z-index: 10;
-        }
-
-        .sidebar-header h3 {
-            font-size: 1.3em;
-            margin-bottom: 10px;
-        }
-
-        .sidebar-count {
-            background: rgba(255,255,255,0.25);
-            padding: 6px 12px;
-            border-radius: 5px;
-            font-size: 0.9em;
-            display: inline-block;
-        }
-
-        .doc-list {
-            padding: 15px;
-        }
-
-        .doc-list-item {
-            padding: 15px;
-            margin-bottom: 12px;
-            background: #f8f9fa;
-            border-left: 4px solid #28a745;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .doc-list-item:hover {
-            background: #d4edda;
-            border-left-color: #1e3c72;
-            transform: translateX(8px);
-            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-        }
-
-        .doc-list-item-title {
-            font-weight: bold;
-            font-size: 1.05em;
-            color: #1e3c72;
-            display: block;
-            margin-bottom: 8px;
-        }
-
-        .doc-list-item-meta {
-            font-size: 0.85em;
-            color: #666;
-            line-height: 1.5;
-        }
-
-        /* Main Content */
-        .main-wrapper {
             padding: 20px;
-            transition: margin-left 0.3s ease;
-        }
-
-        .main-wrapper.shifted {
-            margin-left: 320px;
         }
 
         .container {
@@ -231,6 +119,10 @@
             padding: 25px;
             border-radius: 12px;
             text-align: center;
+        }
+
+        .stat-box.green {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
         }
 
         .stat-box .number {
@@ -406,94 +298,63 @@
             .search-box {
                 flex-direction: column;
             }
-            .sidebar-docs {
-                width: 280px;
-                left: -280px;
-            }
-            .toggle-sidebar-btn.active {
-                left: 300px;
-            }
-            .main-wrapper.shifted {
-                margin-left: 0;
-            }
         }
     </style>
 </head>
 <body>
-    <!-- Toggle Button -->
-    <button class="toggle-sidebar-btn" id="toggleBtn" onclick="toggleSidebar()" title="Danh sách văn bản">
-        📚
-    </button>
+    <div class="container">
+        <header>
+            <h1>🏛️ Hệ thống tra cứu văn bản pháp luật</h1>
+            <p style="font-size: 1.1em; opacity: 0.95;">Tìm kiếm điều khoản trong văn bản từ GitHub</p>
+        </header>
 
-    <!-- Sidebar Documents -->
-    <div class="sidebar-docs" id="sidebarDocs">
-        <div class="sidebar-header">
-            <h3>📚 Văn bản đã tải</h3>
-            <span class="sidebar-count" id="sidebarDocCount">0 văn bản</span>
-        </div>
-        <div class="doc-list" id="docList">
-            <div style="padding: 20px; text-align: center; color: #999;">
-                Đang tải văn bản...
-            </div>
-        </div>
-    </div>
-
-    <!-- Main Content -->
-    <div class="main-wrapper" id="mainWrapper">
-        <div class="container">
-            <header>
-                <h1>🏛️ Hệ thống tra cứu văn bản pháp luật</h1>
-                <p style="font-size: 1.1em; opacity: 0.95;">Tìm kiếm điều khoản trong văn bản từ GitHub</p>
-            </header>
-
-            <div class="content">
-                <div class="stats">
-                    <div class="stat-box">
-                        <div class="number" id="totalFiles">0</div>
-                        <div class="label">Văn bản đã tải</div>
-                    </div>
-                    <div class="stat-box">
-                        <div class="number" id="totalArticles">0</div>
-                        <div class="label">Tổng điều khoản</div>
-                    </div>
-                    <div class="stat-box">
-                        <div class="number" id="totalSearches">0</div>
-                        <div class="label">Lượt tra cứu</div>
-                    </div>
+        <div class="content">
+            <div class="stats">
+                <div class="stat-box">
+                    <div class="number" id="totalFiles">0</div>
+                    <div class="label">Văn bản đã tải</div>
                 </div>
-
-                <div class="search-section">
-                    <h2>🔍 Tra cứu điều khoản</h2>
-                    <div class="hint-box">
-                        <strong>💡 Hướng dẫn:</strong><br>
-                        • Click nút <strong>📚</strong> góc trái trên để xem danh sách văn bản<br>
-                        • <strong>Click vào số Điều/Khoản</strong> → Xem trực tiếp tại vị trí điều khoản<br>
-                        • <strong>Click "Xem toàn bộ"</strong> → Xem văn bản với từ khóa được highlight
-                    </div>
-                    <div class="search-box">
-                        <input 
-                            type="text" 
-                            id="searchInput" 
-                            placeholder="Nhập từ khóa (VD: điều 5, lao động, bảo hiểm...)"
-                            onkeypress="if(event.key==='Enter') searchDocuments()"
-                        >
-                        <button id="searchBtn" onclick="searchDocuments()">
-                            🔍 Tìm kiếm
-                        </button>
-                    </div>
-                    <p style="color: #666; font-size: 0.95em;">
-                        💡 Hệ thống sẽ tìm kiếm trong <strong>tên file</strong> và <strong>nội dung các điều khoản</strong>
-                    </p>
+                <div class="stat-box">
+                    <div class="number" id="totalArticles">0</div>
+                    <div class="label">Tổng điều khoản</div>
                 </div>
-
-                <div id="results"></div>
+                <div class="stat-box">
+                    <div class="number" id="totalSearches">0</div>
+                    <div class="label">Lượt tra cứu</div>
+                </div>
             </div>
 
-            <footer>
-                <p><strong>Hệ thống tra cứu văn bản pháp luật</strong></p>
-                <p>© 2025 - Đội Quản lý thị trường số 6</p>
-            </footer>
+            <div class="search-section">
+                <h2>🔍 Tra cứu điều khoản</h2>
+                <div class="hint-box">
+                    <strong>💡 Hướng dẫn:</strong><br>
+                    • <strong>Click vào số Điều/Khoản</strong> → Xem trực tiếp tại vị trí điều khoản đó<br>
+                    • <strong>Click vào nội dung</strong> → Xem trực tiếp điều khoản<br>
+                    • <strong>Click "Xem toàn bộ"</strong> → Xem văn bản với từ khóa được highlight
+                </div>
+                <div class="search-box">
+                    <input 
+                        type="text" 
+                        id="searchInput" 
+                        placeholder="Nhập từ khóa (VD: điều 5, lao động, bảo hiểm...)"
+                        onkeypress="if(event.key==='Enter') searchDocuments()"
+                    >
+                    <button id="searchBtn" onclick="searchDocuments()">
+                        🔍 Tìm kiếm
+                    </button>
+                </div>
+                <p style="color: #666; font-size: 0.95em;">
+                    💡 Hệ thống sẽ tìm kiếm trong <strong>tên file</strong> và <strong>nội dung các điều khoản</strong>
+                </p>
+            </div>
+
+            <div id="results"></div>
         </div>
+
+        <footer>
+            <p><strong>Hệ thống tra cứu văn bản pháp luật</strong></p>
+            <p>© 2025 - Đội Quản lý thị trường số 6</p>
+        </footer>
     </div>
 
     <script>
@@ -506,70 +367,11 @@
 
         var documents = [];
         var searchCounter = 0;
-        var sidebarOpen = false;
 
         window.addEventListener('load', function() {
             loadDocumentsFromGitHub();
             loadSearchCounter();
         });
-
-        function toggleSidebar() {
-            sidebarOpen = !sidebarOpen;
-            var sidebar = document.getElementById('sidebarDocs');
-            var toggleBtn = document.getElementById('toggleBtn');
-            var mainWrapper = document.getElementById('mainWrapper');
-
-            if (sidebarOpen) {
-                sidebar.classList.add('show');
-                toggleBtn.classList.add('active');
-                mainWrapper.classList.add('shifted');
-                toggleBtn.textContent = '✕';
-                toggleBtn.title = 'Đóng';
-            } else {
-                sidebar.classList.remove('show');
-                toggleBtn.classList.remove('active');
-                mainWrapper.classList.remove('shifted');
-                toggleBtn.textContent = '📚';
-                toggleBtn.title = 'Danh sách văn bản';
-            }
-        }
-
-        function updateDocumentSidebar() {
-            var docListDiv = document.getElementById('docList');
-            document.getElementById('sidebarDocCount').textContent = documents.length + ' văn bản';
-
-            if (documents.length === 0) {
-                docListDiv.innerHTML = '<div style="padding: 20px; text-align: center; color: #999;">Chưa có văn bản</div>';
-                return;
-            }
-
-            var html = '';
-            documents.forEach(function(doc) {
-                html += '<div class="doc-list-item" onclick="viewFullDocument(\'' + encodeURIComponent(doc.fileName) + '\')">';
-                html += '<span class="doc-list-item-title">📄 ' + doc.name + '</span>';
-                html += '<div class="doc-list-item-meta">';
-                html += '📁 ' + doc.fileName + '<br>';
-                html += '📊 ' + doc.articles.length + ' điều khoản';
-                html += '</div>';
-                html += '</div>';
-            });
-
-            docListDiv.innerHTML = html;
-        }
-
-        function viewFullDocument(fileName) {
-            var doc = findDocument(decodeURIComponent(fileName));
-            if (!doc) return;
-
-            sessionStorage.setItem('currentDocument', JSON.stringify({
-                doc: doc,
-                query: '',
-                position: 0,
-                mode: 'full'
-            }));
-
-            window.location.href = 'view.html';
-        }
 
         function loadSearchCounter() {
             var saved = localStorage.getItem('searchCounter');
@@ -607,7 +409,6 @@
                             '<h3>📭 Chưa có văn bản</h3>' +
                             '<p>Thêm file .txt vào folder "' + GITHUB_CONFIG.folder + '"</p>' +
                             '</div>';
-                        updateDocumentSidebar();
                         return;
                     }
 
@@ -629,12 +430,10 @@
                                 loaded++;
                                 if (loaded === txtFiles.length) {
                                     updateStats();
-                                    updateDocumentSidebar();
                                     resultsDiv.innerHTML = 
                                         '<div class="empty-state">' +
                                         '<h3>✅ Đã tải ' + documents.length + ' văn bản</h3>' +
                                         '<p>Nhập từ khóa để bắt đầu tra cứu</p>' +
-                                        '<p style="margin-top: 15px;">💡 Hoặc click nút <strong>📚</strong> để xem danh sách văn bản</p>' +
                                         '</div>';
                                 }
                             })
@@ -649,7 +448,6 @@
                         '<h3>❌ Lỗi</h3>' +
                         '<p>' + error.message + '</p>' +
                         '</div>';
-                    updateDocumentSidebar();
                 });
         }
 
@@ -720,14 +518,17 @@
             documents.forEach(function(doc) {
                 var matches = [];
                 
+                // Tìm trong tên file
                 var fileNameMatch = doc.fileName.toLowerCase().indexOf(lowerQuery) !== -1;
                 var docNameMatch = doc.name.toLowerCase().indexOf(lowerQuery) !== -1;
                 
+                // Tìm trong các điều khoản
                 var articleMatches = doc.articles.filter(function(article) {
                     return article.content.toLowerCase().indexOf(lowerQuery) !== -1 ||
                            article.title.toLowerCase().indexOf(lowerQuery) !== -1;
                 });
 
+                // Nếu tìm thấy trong tên file hoặc điều khoản
                 if (fileNameMatch || docNameMatch || articleMatches.length > 0) {
                     results.push({ 
                         document: doc, 
@@ -764,6 +565,7 @@
                 html += '<div class="result-header">';
                 html += '<div><h3>' + doc.name + '</h3>';
                 
+                // Hiển thị badge nếu tìm thấy trong tên file
                 if (matchedFileName) {
                     html += '<span style="background: #28a745; color: white; padding: 4px 10px; border-radius: 15px; font-size: 0.85em; margin-left: 10px;">✓ Khớp tên file</span>';
                 }
@@ -773,11 +575,12 @@
                 html += '</div>';
                 html += '<div class="result-meta">📄 File: ' + highlightText(doc.fileName, query) + ' | 🎯 ' + matches.length + ' điều khoản</div>';
                 
+                // Nếu chỉ khớp tên file mà không có điều khoản nào
                 if (matches.length === 0 && matchedFileName) {
                     html += '<div class="articles-found">';
-                    html += '<p style="color: #666; padding: 15px;">📋 Văn bản khớp với "<strong>' + query + '</strong>" trong tên file.</p>';
+                    html += '<p style="color: #666; padding: 15px;">📋 Văn bản này khớp với từ khóa "<strong>' + query + '</strong>" trong tên file. Click "Xem toàn bộ" để xem nội dung.</p>';
                     html += '<button class="view-detail-btn" onclick="viewDocument(\'' + 
-                            encodeURIComponent(doc.fileName) + '\', \'' + query + '\', 0)">👁️ Xem toàn bộ văn bản</button>';
+                            encodeURIComponent(doc.fileName) + '\', \'' + query + '\', 0)" style="margin-top: 10px;">👁️ Xem toàn bộ văn bản</button>';
                     html += '</div>';
                 } else {
                     html += '<div class="articles-found"><h4>📍 Các điều khoản tìm thấy:</h4>';
@@ -789,7 +592,8 @@
                         html += '<div class="article-header">';
                         html += '<span class="article-number" onclick="viewArticle(\'' + 
                                 encodeURIComponent(doc.fileName) + '\', ' + article.position + 
-                                ', \'' + article.label + '\', \'' + article.number + '\')">';
+                                ', \'' + article.label + '\', \'' + article.number + '\')" ' +
+                                'title="Click để xem ' + article.label + ' ' + article.number + '">';
                         html += '📌 ' + article.label + ' ' + article.number + '</span>';
                         html += '<button class="view-detail-btn" onclick="viewDocument(\'' + 
                                 encodeURIComponent(doc.fileName) + '\', \'' + query + '\', ' + 
@@ -800,7 +604,7 @@
                                 ', \'' + article.label + '\', \'' + article.number + '\')">';
                         html += preview + (article.content.length > 300 ? '...' : '');
                         html += '</div>';
-                        html += '<span class="click-hint">💡 Click để xem trực tiếp</span>';
+                        html += '<span class="click-hint">💡 Click để xem trực tiếp tại vị trí này</span>';
                         html += '</div>';
                     });
 
@@ -823,4 +627,56 @@
         }
 
         function escapeRegex(string) {
-            return string.replace(/[.*+?^${}()|[\]\\]/g,
+            return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        }
+
+        function viewDocument(fileName, query, position) {
+            var doc = findDocument(decodeURIComponent(fileName));
+            if (!doc) return;
+
+            sessionStorage.setItem('currentDocument', JSON.stringify({
+                doc: doc,
+                query: query,
+                position: position,
+                mode: 'search'
+            }));
+
+            window.location.href = 'view.html';
+        }
+
+        function viewArticle(fileName, position, label, number) {
+            var doc = findDocument(decodeURIComponent(fileName));
+            if (!doc) return;
+
+            sessionStorage.setItem('currentDocument', JSON.stringify({
+                doc: doc,
+                position: position,
+                articleLabel: label,
+                articleNumber: number,
+                mode: 'article'
+            }));
+
+            window.location.href = 'view.html';
+        }
+
+        function findDocument(fileName) {
+            for (var i = 0; i < documents.length; i++) {
+                if (documents[i].fileName === fileName) {
+                    return documents[i];
+                }
+            }
+            return null;
+        }
+
+        function updateStats() {
+            document.getElementById('totalFiles').textContent = documents.length;
+            
+            var totalArticles = 0;
+            documents.forEach(function(doc) {
+                totalArticles += doc.articles.length;
+            });
+            document.getElementById('totalArticles').textContent = totalArticles;
+        }
+    </script>
+</body>
+</html>
