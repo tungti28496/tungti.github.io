@@ -39,11 +39,6 @@
             margin-bottom: 10px;
         }
 
-        header .subtitle {
-            opacity: 0.95;
-            font-size: 1.1em;
-        }
-
         .content {
             padding: 40px;
         }
@@ -62,6 +57,15 @@
             font-size: 1.8em;
         }
 
+        .hint-box {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 8px;
+            color: #1565c0;
+            margin-bottom: 15px;
+            border-left: 4px solid #1e3c72;
+        }
+
         .search-box {
             display: flex;
             gap: 15px;
@@ -74,7 +78,6 @@
             border: 2px solid #ddd;
             border-radius: 10px;
             font-size: 1.1em;
-            transition: border-color 0.3s;
         }
 
         .search-box input:focus {
@@ -91,7 +94,6 @@
             font-size: 1.1em;
             font-weight: 600;
             cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
         }
 
         .search-box button:hover:not(:disabled) {
@@ -119,10 +121,13 @@
             text-align: center;
         }
 
+        .stat-box.green {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+        }
+
         .stat-box .number {
             font-size: 3em;
             font-weight: bold;
-            margin-bottom: 5px;
         }
 
         .stat-box .label {
@@ -137,21 +142,6 @@
             color: #1e3c72;
         }
 
-        .loading::after {
-            content: '...';
-            animation: dots 1.5s infinite;
-        }
-
-        @keyframes dots {
-            0%, 20% { content: '.'; }
-            40% { content: '..'; }
-            60%, 100% { content: '...'; }
-        }
-
-        .results {
-            margin-top: 30px;
-        }
-
         .result-item {
             background: white;
             border: 2px solid #e0e0e0;
@@ -159,24 +149,16 @@
             border-radius: 12px;
             padding: 25px;
             margin-bottom: 20px;
-            transition: box-shadow 0.3s;
         }
 
         .result-item:hover {
             box-shadow: 0 5px 20px rgba(0,0,0,0.1);
         }
 
-        .result-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: start;
-            margin-bottom: 15px;
-        }
-
         .result-header h3 {
             color: #1e3c72;
             font-size: 1.5em;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
         }
 
         .file-badge {
@@ -186,6 +168,8 @@
             border-radius: 20px;
             font-size: 0.9em;
             font-weight: 600;
+            display: inline-block;
+            margin-bottom: 10px;
         }
 
         .result-meta {
@@ -213,7 +197,6 @@
             border-radius: 8px;
             padding: 15px;
             margin-bottom: 12px;
-            transition: all 0.3s;
         }
 
         .article-item:hover {
@@ -235,14 +218,26 @@
             cursor: pointer;
             padding: 5px 10px;
             border-radius: 6px;
-            transition: all 0.3s;
-            display: inline-block;
         }
 
         .article-number:hover {
             background: #1e3c72;
             color: white;
-            transform: translateX(5px);
+        }
+
+        .view-detail-btn {
+            background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9em;
+            font-weight: 600;
+        }
+
+        .view-detail-btn:hover {
+            transform: scale(1.05);
         }
 
         .article-preview {
@@ -256,14 +251,6 @@
             color: #333;
         }
 
-        .click-hint {
-            color: #999;
-            font-size: 0.85em;
-            font-style: italic;
-            margin-top: 8px;
-            display: block;
-        }
-
         .article-preview mark {
             background: #ffeb3b;
             padding: 2px 5px;
@@ -271,20 +258,12 @@
             font-weight: 600;
         }
 
-        .view-detail-btn {
-            background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
-            color: white;
-            border: none;
-            padding: 8px 20px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 0.9em;
-            font-weight: 600;
-            transition: transform 0.2s;
-        }
-
-        .view-detail-btn:hover {
-            transform: scale(1.05);
+        .click-hint {
+            color: #999;
+            font-size: 0.85em;
+            font-style: italic;
+            margin-top: 8px;
+            display: block;
         }
 
         .empty-state {
@@ -296,10 +275,6 @@
         .empty-state h3 {
             font-size: 2em;
             margin-bottom: 15px;
-        }
-
-        .empty-state p {
-            font-size: 1.1em;
         }
 
         footer {
@@ -316,73 +291,12 @@
             font-weight: 600;
         }
 
-        footer a:hover {
-            text-decoration: underline;
-        }
-
-        /* Document viewer page styles */
-        .document-viewer {
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 40px;
-            background: white;
-        }
-
-        .document-viewer h1 {
-            color: #1e3c72;
-            border-bottom: 3px solid #1e3c72;
-            padding-bottom: 15px;
-            margin-bottom: 25px;
-        }
-
-        .document-meta {
-            background: #f8f9fa;
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 30px;
-        }
-
-        .document-content {
-            line-height: 1.8;
-            font-size: 1.05em;
-            white-space: pre-wrap;
-        }
-
-        .document-content .highlight {
-            background: #ffeb3b;
-            padding: 3px 6px;
-            border-radius: 4px;
-            font-weight: 600;
-            border: 2px solid #fdd835;
-        }
-
-        .back-button {
-            display: inline-block;
-            margin-bottom: 20px;
-            padding: 10px 25px;
-            background: #6c757d;
-            color: white;
-            text-decoration: none;
-            border-radius: 8px;
-            font-weight: 600;
-            transition: background 0.2s;
-        }
-
-        .back-button:hover {
-            background: #5a6268;
-        }
-
         @media (max-width: 768px) {
             header h1 {
                 font-size: 1.8em;
             }
-
             .search-box {
                 flex-direction: column;
-            }
-
-            .stat-box .number {
-                font-size: 2em;
             }
         }
     </style>
@@ -391,7 +305,7 @@
     <div class="container">
         <header>
             <h1>🏛️ Hệ thống tra cứu văn bản pháp luật</h1>
-            <p class="subtitle">Tìm kiếm điều khoản trong văn bản từ GitHub</p>
+            <p style="font-size: 1.1em; opacity: 0.95;">Tìm kiếm điều khoản trong văn bản từ GitHub</p>
         </header>
 
         <div class="content">
@@ -412,11 +326,17 @@
 
             <div class="search-section">
                 <h2>🔍 Tra cứu điều khoản</h2>
+                <div class="hint-box">
+                    <strong>💡 Hướng dẫn:</strong><br>
+                    • <strong>Click vào số Điều/Khoản</strong> → Xem trực tiếp tại vị trí điều khoản đó<br>
+                    • <strong>Click vào nội dung</strong> → Xem trực tiếp điều khoản<br>
+                    • <strong>Click "Xem toàn bộ"</strong> → Xem văn bản với từ khóa được highlight
+                </div>
                 <div class="search-box">
                     <input 
                         type="text" 
                         id="searchInput" 
-                        placeholder="Nhập từ khóa tìm kiếm (VD: điều 5, lao động, bảo hiểm...)"
+                        placeholder="Nhập từ khóa (VD: điều 5, lao động, bảo hiểm...)"
                         onkeypress="if(event.key==='Enter') searchDocuments()"
                     >
                     <button id="searchBtn" onclick="searchDocuments()">
@@ -433,141 +353,119 @@
 
         <footer>
             <p><strong>Hệ thống tra cứu văn bản pháp luật</strong></p>
-            <p>Phát triển bởi <a href="https://github.com/tungti28496" target="_blank">tungti28496</a></p>
-            <p style="margin-top: 10px; font-size: 0.9em;">© 2024 - Hỗ trợ tra cứu văn bản từ GitHub</p>
+            <p>© 2024 - tungti28496.github.io</p>
         </footer>
     </div>
 
     <script>
-        // CẤU HÌNH GITHUB - QUAN TRỌNG: Thay đổi thông tin này
-        const GITHUB_CONFIG = {
-            username: 'tungti28496',           // Tên GitHub của bạn
-            repository: 'tungti.github.io',    // Tên repository
-            branch: 'main',                     // Branch chứa file (thường là 'main' hoặc 'master')
-            folder: 'documents'                 // Folder chứa file .txt (để trống '' nếu ở root)
+        var GITHUB_CONFIG = {
+            username: 'tungti28496',
+            repository: 'tungti.github.io',
+            branch: 'main',
+            folder: 'documents'
         };
 
-        let documents = [];
-        let searchCounter = 0;
+        var documents = [];
+        var searchCounter = 0;
 
-        // Load data when page loads
-        window.addEventListener('load', async () => {
-            await loadDocumentsFromGitHub();
+        window.addEventListener('load', function() {
+            loadDocumentsFromGitHub();
             loadSearchCounter();
         });
 
-        // Load search counter from localStorage
         function loadSearchCounter() {
-            const saved = localStorage.getItem('searchCounter');
+            var saved = localStorage.getItem('searchCounter');
             if (saved) {
                 searchCounter = parseInt(saved);
                 document.getElementById('totalSearches').textContent = searchCounter;
             }
         }
 
-        // Save search counter
         function saveSearchCounter() {
             localStorage.setItem('searchCounter', searchCounter.toString());
         }
 
-        // Load documents from GitHub
-        async function loadDocumentsFromGitHub() {
-            const resultsDiv = document.getElementById('results');
-            resultsDiv.innerHTML = '<div class="loading">⏳ Đang tải văn bản từ GitHub</div>';
+        function loadDocumentsFromGitHub() {
+            var resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = '<div class="loading">⏳ Đang tải văn bản từ GitHub...</div>';
 
-            try {
-                const folder = GITHUB_CONFIG.folder ? `/${GITHUB_CONFIG.folder}` : '';
-                const apiUrl = `https://api.github.com/repos/${GITHUB_CONFIG.username}/${GITHUB_CONFIG.repository}/contents${folder}?ref=${GITHUB_CONFIG.branch}`;
-                
-                const response = await fetch(apiUrl);
-                if (!response.ok) {
-                    throw new Error('Không thể tải danh sách file từ GitHub');
-                }
+            var folder = GITHUB_CONFIG.folder ? '/' + GITHUB_CONFIG.folder : '';
+            var apiUrl = 'https://api.github.com/repos/' + GITHUB_CONFIG.username + '/' + 
+                        GITHUB_CONFIG.repository + '/contents' + folder + '?ref=' + GITHUB_CONFIG.branch;
+            
+            fetch(apiUrl)
+                .then(function(response) {
+                    if (!response.ok) throw new Error('Không thể tải danh sách file');
+                    return response.json();
+                })
+                .then(function(files) {
+                    var txtFiles = files.filter(function(file) {
+                        return file.name.endsWith('.txt');
+                    });
 
-                const files = await response.json();
-                const txtFiles = files.filter(file => file.name.endsWith('.txt'));
-
-                if (txtFiles.length === 0) {
-                    resultsDiv.innerHTML = `
-                        <div class="empty-state">
-                            <h3>📭 Chưa có văn bản nào</h3>
-                            <p>Hãy thêm file .txt vào folder "${GITHUB_CONFIG.folder || 'root'}" trong repository của bạn</p>
-                        </div>
-                    `;
-                    return;
-                }
-
-                // Load content of each file
-                for (const file of txtFiles) {
-                    try {
-                        const contentResponse = await fetch(file.download_url);
-                        const content = await contentResponse.text();
-                        
-                        const articles = extractArticles(content);
-                        
-                        documents.push({
-                            name: file.name.replace('.txt', ''),
-                            fileName: file.name,
-                            url: file.html_url,
-                            downloadUrl: file.download_url,
-                            content: content,
-                            articles: articles
-                        });
-                    } catch (error) {
-                        console.error(`Error loading ${file.name}:`, error);
+                    if (txtFiles.length === 0) {
+                        resultsDiv.innerHTML = 
+                            '<div class="empty-state">' +
+                            '<h3>📭 Chưa có văn bản</h3>' +
+                            '<p>Thêm file .txt vào folder "' + GITHUB_CONFIG.folder + '"</p>' +
+                            '</div>';
+                        return;
                     }
-                }
 
-                updateStats();
-                resultsDiv.innerHTML = `
-                    <div class="empty-state">
-                        <h3>✅ Đã tải ${documents.length} văn bản</h3>
-                        <p>Nhập từ khóa vào ô tìm kiếm để bắt đầu tra cứu</p>
-                    </div>
-                `;
-
-            } catch (error) {
-                resultsDiv.innerHTML = `
-                    <div class="empty-state">
-                        <h3>❌ Lỗi khi tải văn bản</h3>
-                        <p>${error.message}</p>
-                        <p style="margin-top: 15px; font-size: 0.9em;">
-                            Kiểm tra lại cấu hình GITHUB_CONFIG trong code
-                        </p>
-                    </div>
-                `;
-            }
+                    var loaded = 0;
+                    txtFiles.forEach(function(file) {
+                        fetch(file.download_url)
+                            .then(function(response) { return response.text(); })
+                            .then(function(content) {
+                                var articles = extractArticles(content);
+                                documents.push({
+                                    name: file.name.replace('.txt', ''),
+                                    fileName: file.name,
+                                    url: file.html_url,
+                                    downloadUrl: file.download_url,
+                                    content: content,
+                                    articles: articles
+                                });
+                                
+                                loaded++;
+                                if (loaded === txtFiles.length) {
+                                    updateStats();
+                                    resultsDiv.innerHTML = 
+                                        '<div class="empty-state">' +
+                                        '<h3>✅ Đã tải ' + documents.length + ' văn bản</h3>' +
+                                        '<p>Nhập từ khóa để bắt đầu tra cứu</p>' +
+                                        '</div>';
+                                }
+                            })
+                            .catch(function(error) {
+                                console.error('Error loading file:', error);
+                            });
+                    });
+                })
+                .catch(function(error) {
+                    resultsDiv.innerHTML = 
+                        '<div class="empty-state">' +
+                        '<h3>❌ Lỗi</h3>' +
+                        '<p>' + error.message + '</p>' +
+                        '</div>';
+                });
         }
 
-        // Extract articles from content
         function extractArticles(content) {
-            const articles = [];
-            
-            const patterns = [
-                {
-                    regex: /Điều\s+(\d+)[.:]\s*([^\n]+(?:\n(?!Điều\s+\d+)[^\n]+)*)/gi,
-                    type: 'article',
-                    label: 'Điều'
-                },
-                {
-                    regex: /Khoản\s+(\d+)[.:]\s*([^\n]+(?:\n(?!Khoản\s+\d+)[^\n]+)*)/gi,
-                    type: 'clause',
-                    label: 'Khoản'
-                },
-                {
-                    regex: /Điểm\s+([a-z])[.):]\s*([^\n]+)/gi,
-                    type: 'point',
-                    label: 'Điểm'
-                }
+            var articles = [];
+            var patterns = [
+                { regex: /Điều\s+(\d+)[.:]\s*([^\n]+(?:\n(?!Điều\s+\d+)[^\n]+)*)/gi, type: 'article', label: 'Điều' },
+                { regex: /Khoản\s+(\d+)[.:]\s*([^\n]+(?:\n(?!Khoản\s+\d+)[^\n]+)*)/gi, type: 'clause', label: 'Khoản' },
+                { regex: /Điểm\s+([a-z])[.):]\s*([^\n]+)/gi, type: 'point', label: 'Điểm' }
             ];
 
-            patterns.forEach(pattern => {
-                const regex = new RegExp(pattern.regex);
-                let match;
+            patterns.forEach(function(pattern) {
+                var regex = new RegExp(pattern.regex);
+                var match;
                 while ((match = regex.exec(content)) !== null) {
-                    const startPos = match.index;
-                    const endPos = Math.min(startPos + 500, content.length);
-                    const context = content.substring(startPos, endPos);
+                    var startPos = match.index;
+                    var endPos = Math.min(startPos + 500, content.length);
+                    var context = content.substring(startPos, endPos);
 
                     articles.push({
                         type: pattern.type,
@@ -584,21 +482,20 @@
             return articles;
         }
 
-        // Search in documents
         function searchDocuments() {
-            const query = document.getElementById('searchInput').value.trim();
+            var query = document.getElementById('searchInput').value.trim();
             
             if (!query) {
-                alert('⚠️ Vui lòng nhập từ khóa tìm kiếm!');
+                alert('⚠️ Vui lòng nhập từ khóa!');
                 return;
             }
 
             if (documents.length === 0) {
-                alert('⚠️ Chưa có văn bản nào được tải!');
+                alert('⚠️ Chưa có văn bản nào!');
                 return;
             }
 
-            const searchBtn = document.getElementById('searchBtn');
+            var searchBtn = document.getElementById('searchBtn');
             searchBtn.disabled = true;
             searchBtn.textContent = '⏳ Đang tìm...';
 
@@ -606,167 +503,146 @@
             saveSearchCounter();
             document.getElementById('totalSearches').textContent = searchCounter;
 
-            setTimeout(() => {
-                const results = searchInDocuments(query);
+            setTimeout(function() {
+                var results = searchInDocuments(query);
                 displayResults(results, query);
                 searchBtn.disabled = false;
                 searchBtn.textContent = '🔍 Tìm kiếm';
             }, 500);
         }
 
-        // Search in all documents
         function searchInDocuments(query) {
-            const results = [];
-            const lowerQuery = query.toLowerCase();
+            var results = [];
+            var lowerQuery = query.toLowerCase();
 
-            documents.forEach(doc => {
-                const matchingArticles = doc.articles.filter(article => 
-                    article.content.toLowerCase().includes(lowerQuery) ||
-                    article.title.toLowerCase().includes(lowerQuery)
-                );
+            documents.forEach(function(doc) {
+                var matches = doc.articles.filter(function(article) {
+                    return article.content.toLowerCase().indexOf(lowerQuery) !== -1 ||
+                           article.title.toLowerCase().indexOf(lowerQuery) !== -1;
+                });
 
-                if (matchingArticles.length > 0) {
-                    results.push({
-                        document: doc,
-                        matches: matchingArticles
-                    });
+                if (matches.length > 0) {
+                    results.push({ document: doc, matches: matches });
                 }
             });
 
             return results;
         }
 
-        // Display search results
         function displayResults(results, query) {
-            const resultsDiv = document.getElementById('results');
+            var resultsDiv = document.getElementById('results');
 
             if (results.length === 0) {
-                resultsDiv.innerHTML = `
-                    <div class="empty-state">
-                        <h3>😕 Không tìm thấy kết quả</h3>
-                        <p>Không tìm thấy điều khoản nào chứa từ khóa "<strong>${query}</strong>"</p>
-                        <p style="margin-top: 10px; font-size: 0.95em;">💡 Thử tìm kiếm với từ khóa khác</p>
-                    </div>
-                `;
+                resultsDiv.innerHTML = 
+                    '<div class="empty-state">' +
+                    '<h3>😕 Không tìm thấy</h3>' +
+                    '<p>Không có điều khoản nào chứa "' + query + '"</p>' +
+                    '</div>';
                 return;
             }
 
-            let html = `<h2 style="color: #28a745; margin-bottom: 25px; font-size: 1.8em;">
-                ✅ Tìm thấy ${results.length} văn bản có chứa "${query}"
-            </h2>`;
+            var html = '<h2 style="color: #28a745; margin-bottom: 25px; font-size: 1.8em;">';
+            html += '✅ Tìm thấy ' + results.length + ' văn bản có chứa "' + query + '"</h2>';
 
-            results.forEach((result, index) => {
-                const doc = result.document;
-                const matches = result.matches;
+            results.forEach(function(result) {
+                var doc = result.document;
+                var matches = result.matches;
 
-                html += `
-                    <div class="result-item">
-                        <div class="result-header">
-                            <div>
-                                <h3>${doc.name}</h3>
-                                <div class="result-meta">
-                                    📄 File: ${doc.fileName} | 🎯 ${matches.length} điều khoản khớp
-                                </div>
-                            </div>
-                            <span class="file-badge">📁 .txt</span>
-                        </div>
+                html += '<div class="result-item">';
+                html += '<div class="result-header">';
+                html += '<div><h3>' + doc.name + '</h3></div>';
+                html += '<span class="file-badge">📁 .txt</span>';
+                html += '</div>';
+                html += '<div class="result-meta">📄 File: ' + doc.fileName + ' | 🎯 ' + matches.length + ' điều khoản</div>';
+                html += '<div class="articles-found"><h4>📍 Các điều khoản tìm thấy:</h4>';
 
-                        <div class="articles-found">
-                            <h4>📍 Các điều khoản tìm thấy:</h4>
-                `;
-
-                matches.slice(0, 10).forEach((article, idx) => {
-                    const preview = highlightText(article.content.substring(0, 300), query);
+                matches.slice(0, 10).forEach(function(article) {
+                    var preview = highlightText(article.content.substring(0, 300), query);
                     
-                    html += `
-                        <div class="article-item">
-                            <div class="article-header">
-                                <span class="article-number" 
-                                      onclick="viewArticle('${encodeURIComponent(doc.fileName)}', ${article.position}, '${article.label}', '${article.number}')" 
-                                      title="Click để xem trực tiếp ${article.label} ${article.number}">
-                                    📌 ${article.label} ${article.number}
-                                </span>
-                                <button class="view-detail-btn" onclick="viewDocument('${encodeURIComponent(doc.fileName)}', '${query}', ${article.position})">
-                                    👁️ Xem toàn bộ văn bản
-                                </button>
-                            </div>
-                            <div class="article-preview" 
-                                 onclick="viewArticle('${encodeURIComponent(doc.fileName)}', ${article.position}, '${article.label}', '${article.number}')">
-                                ${preview}${article.content.length > 300 ? '...' : ''}
-                            </div>
-                            <span class="click-hint">💡 Click vào điều khoản hoặc nội dung để xem trực tiếp tại vị trí này</span>
-                        </div>
-                    `;
+                    html += '<div class="article-item">';
+                    html += '<div class="article-header">';
+                    html += '<span class="article-number" onclick="viewArticle(\'' + 
+                            encodeURIComponent(doc.fileName) + '\', ' + article.position + 
+                            ', \'' + article.label + '\', \'' + article.number + '\')" ' +
+                            'title="Click để xem ' + article.label + ' ' + article.number + '">';
+                    html += '📌 ' + article.label + ' ' + article.number + '</span>';
+                    html += '<button class="view-detail-btn" onclick="viewDocument(\'' + 
+                            encodeURIComponent(doc.fileName) + '\', \'' + query + '\', ' + 
+                            article.position + ')">👁️ Xem toàn bộ</button>';
+                    html += '</div>';
+                    html += '<div class="article-preview" onclick="viewArticle(\'' + 
+                            encodeURIComponent(doc.fileName) + '\', ' + article.position + 
+                            ', \'' + article.label + '\', \'' + article.number + '\')">';
+                    html += preview + (article.content.length > 300 ? '...' : '');
+                    html += '</div>';
+                    html += '<span class="click-hint">💡 Click để xem trực tiếp tại vị trí này</span>';
+                    html += '</div>';
                 });
 
                 if (matches.length > 10) {
-                    html += `<p style="color: #666; font-style: italic; margin-top: 10px;">
-                        ... và ${matches.length - 10} điều khoản khác
-                    </p>`;
+                    html += '<p style="color: #666; font-style: italic; margin-top: 10px;">';
+                    html += '... và ' + (matches.length - 10) + ' điều khoản khác</p>';
                 }
 
-                html += `
-                        </div>
-                    </div>
-                `;
+                html += '</div></div>';
             });
 
             resultsDiv.innerHTML = html;
         }
 
-        // Highlight search term
         function highlightText(text, query) {
             if (!query) return text;
-            const regex = new RegExp(`(${escapeRegex(query)})`, 'gi');
+            var regex = new RegExp('(' + escapeRegex(query) + ')', 'gi');
             return text.replace(regex, '<mark>$1</mark>');
         }
 
-        // Escape regex special characters
         function escapeRegex(string) {
             return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
         }
 
-        // View document detail
         function viewDocument(fileName, query, position) {
-            const doc = documents.find(d => d.fileName === decodeURIComponent(fileName));
+            var doc = findDocument(decodeURIComponent(fileName));
             if (!doc) return;
 
-            // Save to sessionStorage to pass to view page
             sessionStorage.setItem('currentDocument', JSON.stringify({
                 doc: doc,
                 query: query,
                 position: position,
-                mode: 'search' // Chế độ tìm kiếm
+                mode: 'search'
             }));
 
-            // Navigate to view page
             window.location.href = 'view.html';
         }
 
-        // View specific article
         function viewArticle(fileName, position, label, number) {
-            const doc = documents.find(d => d.fileName === decodeURIComponent(fileName));
+            var doc = findDocument(decodeURIComponent(fileName));
             if (!doc) return;
 
-            // Save to sessionStorage
             sessionStorage.setItem('currentDocument', JSON.stringify({
                 doc: doc,
                 position: position,
                 articleLabel: label,
                 articleNumber: number,
-                mode: 'article' // Chế độ xem điều khoản
+                mode: 'article'
             }));
 
-            // Navigate to view page
             window.location.href = 'view.html';
         }
 
-        // Update statistics
+        function findDocument(fileName) {
+            for (var i = 0; i < documents.length; i++) {
+                if (documents[i].fileName === fileName) {
+                    return documents[i];
+                }
+            }
+            return null;
+        }
+
         function updateStats() {
             document.getElementById('totalFiles').textContent = documents.length;
             
-            let totalArticles = 0;
-            documents.forEach(doc => {
+            var totalArticles = 0;
+            documents.forEach(function(doc) {
                 totalArticles += doc.articles.length;
             });
             document.getElementById('totalArticles').textContent = totalArticles;
